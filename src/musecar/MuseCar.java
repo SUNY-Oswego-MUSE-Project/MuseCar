@@ -28,6 +28,7 @@ public class MuseCar implements MuseGestures {
 
     private boolean moving;
     private int speed;
+    private boolean light;
 
     private int port;
     private MuseGestureServer server;
@@ -41,6 +42,7 @@ public class MuseCar implements MuseGestures {
     public MuseCar(int port) {
         this.moving = false;
         this.speed = 0;
+        this.light = true;
 
         this.port = port;
         this.server = new MuseGestureServer(this, port);
@@ -78,6 +80,21 @@ public class MuseCar implements MuseGestures {
         this.setSpeed(0);
         this.moving = !this.moving;
         System.out.println("Moving: " + this.moving);
+    }
+
+    /**
+     * Toggles the light on the car on and off.
+     */
+    public void toggleLight() {
+        this.light = !this.light;
+        System.out.println("Light: " + this.light);
+
+        // TODO: Implement car light controls
+    }
+
+    @Override
+    public void onBlink() {
+        this.toggleLight();
     }
 
     @Override
