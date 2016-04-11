@@ -20,7 +20,7 @@ package musecar;
  * The <code>Main</code> class is used to control the main functionality of the
  * program.
  *
- * @author Christopher Wells <cwellsny@nycap.rr.com>
+ * @author Christopher Wells {@literal <cwellsny@nycap.rr.com>}
  */
 public class Main {
 
