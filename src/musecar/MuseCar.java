@@ -28,6 +28,7 @@ public class MuseCar implements MuseGestures {
 
     private boolean moving;
     private int speed;
+    private int idealSpeed;
     private boolean light;
 
     private int port;
@@ -42,6 +43,7 @@ public class MuseCar implements MuseGestures {
     public MuseCar(int port) {
         this.moving = false;
         this.speed = 0;
+        this.idealSpeed = 0;
         this.light = true;
 
         this.port = port;
@@ -77,8 +79,16 @@ public class MuseCar implements MuseGestures {
      * Toggles the car between moving and not moving.
      */
     public void toggleMoving() {
-        this.setSpeed(0);
-        this.moving = !this.moving;
+        if (this.moving) {
+            // Stop the car if it is moving
+            this.setSpeed(0);
+            this.moving = !this.moving;
+        } else {
+            // Start the car if it is not moving
+            this.moving = !this.moving;
+            this.setSpeed(this.idealSpeed);
+        }
+
         System.out.println("Moving: " + this.moving);
     }
 
@@ -104,6 +114,8 @@ public class MuseCar implements MuseGestures {
 
     @Override
     public void onConcentrationChange(int state) {
+        this.idealSpeed = state;
+
         if (this.moving) {
             this.setSpeed(state);
         }
