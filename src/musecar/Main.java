@@ -17,16 +17,20 @@
 package musecar;
 
 /**
+ * The <code>Main</code> class is used to control the main functionality of the
+ * program.
  *
  * @author Christopher Wells <cwellsny@nycap.rr.com>
  */
 public class Main {
 
     /**
+     * Runs the program.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
     }
-    
+
 }
