@@ -18,6 +18,7 @@ package musecar;
 
 import musegestures.MuseGestureServer;
 import musegestures.MuseGestures;
+import serialcontrolledcar.CarController;
 
 /**
  * The <code>MuseCar</code> class is used to represent and control the rc-car.
@@ -33,6 +34,7 @@ public class MuseCar implements MuseGestures {
 
     private int port;
     private MuseGestureServer server;
+    private CarController controller;
 
     /**
      * Initializes an object of the <code>MuseCar</code> class with the given
@@ -49,6 +51,15 @@ public class MuseCar implements MuseGestures {
         this.port = port;
         this.server = new MuseGestureServer(this, port);
         this.server.start();
+
+        this.controller = new CarController("/dev/ttyS88");
+        
+        controller.turnOffLED1Red();
+        controller.turnOffLED1Green();
+        controller.turnOffLED1Blue();
+        controller.turnOnLED2Red();
+        controller.turnOffLED2Green();
+        controller.turnOffLED2Blue();
     }
 
     /**
@@ -61,15 +72,18 @@ public class MuseCar implements MuseGestures {
             this.speed = speed;
             System.out.println("Speed: " + this.speed);
 
-            // TODO: Implement car movement controls
             switch (speed) {
                 case 0:
+                    controller.stop();
                     break;
                 case 1:
+                    controller.goForwardSlow();
                     break;
                 case 2:
+                    controller.goForwardMedium();
                     break;
                 case 3:
+                    controller.goForwardFast();
                     break;
             }
         }
@@ -83,29 +97,38 @@ public class MuseCar implements MuseGestures {
             // Stop the car if it is moving
             this.setSpeed(0);
             this.moving = !this.moving;
+            controller.turnOnLED2Red();
+            controller.turnOffLED2Green();
+            controller.turnOffLED2Blue();
         } else {
             // Start the car if it is not moving
             this.moving = !this.moving;
             this.setSpeed(this.idealSpeed);
+            controller.turnOffLED2Red();
+            controller.turnOnLED2Green();
+            controller.turnOffLED2Blue();
         }
 
         System.out.println("Moving: " + this.moving);
     }
 
-    /**
-     * Toggles the light on the car on and off.
-     */
-    public void toggleLight() {
-        this.light = !this.light;
-        System.out.println("Light: " + this.light);
+//    /**
+//     * Toggles the light on the car on and off.
+//     */
+//    public void toggleLight() {
+//        this.light = !this.light;
+//        System.out.println("Light: " + this.light);
+//        if (light) {
+//            controller.turnOnLight();
+//        } else {
+//            controller.turnOffLight();
+//        }
+//    }
 
-        // TODO: Implement car light controls
-    }
-
-    @Override
-    public void onBlink() {
-        this.toggleLight();
-    }
+//    @Override
+//    public void onBlink() {
+//        this.toggleLight();
+//    }
 
     @Override
     public void onJawClench() {
@@ -119,5 +142,28 @@ public class MuseCar implements MuseGestures {
         if (this.moving) {
             this.setSpeed(state);
         }
+        
+        switch (state) {
+                case 0:
+                    controller.turnOffLED1Red();
+                    controller.turnOffLED1Green();
+                    controller.turnOffLED1Blue();
+                    break;
+                case 1:
+                    controller.turnOffLED1Red();
+                    controller.turnOffLED1Green();
+                    controller.turnOnLED1Blue();
+                    break;
+                case 2:
+                    controller.turnOffLED1Red();
+                    controller.turnOnLED1Green();
+                    controller.turnOffLED1Blue();
+                    break;
+                case 3:
+                    controller.turnOnLED1Red();
+                    controller.turnOffLED1Green();
+                    controller.turnOffLED1Blue();
+                    break;
+            }
     }
 }
